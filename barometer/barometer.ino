@@ -230,14 +230,6 @@ void drawGraph()
 
 void appendMeasure(Measure newMeasure)
 {
-  for (uint16_t i = 23; i >= 0; i--) {
-    Measure measure = history[i];
-    if (0.0 == measure.pressure()) {
-      history[i] = newMeasure;
-      return;
-    }
-  }
-
   for (uint16_t i = 0; i < 23; ++i) {
     history[i] = history[i + 1];
   }
