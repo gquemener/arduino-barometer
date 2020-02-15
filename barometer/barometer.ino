@@ -179,6 +179,11 @@ void initScreen()
   tft.textMode();
   tft.textColor(RA8875_WHITE, RA8875_BLACK);
   writeLog("Starting...");
+
+  pinMode(RA8875_INT, INPUT);
+  digitalWrite(RA8875_INT, HIGH);
+
+  tft.touchEnable(true);
 }
 
 bool initializing = true;
@@ -352,8 +357,55 @@ void setup()
   drawGraph();
 }
 
+unsigned long lastActivity = 0;
+const long idleTimeout = 10000;
+bool sleeping = false;
+
+void triggerSleep()
+{
+  if (sleeping) {
+    return;
+  }
+
+  unsigned long currentMillis = millis();
+  if (0 == lastActivity) {
+    lastActivity = currentMillis;
+  }
+
+  if (currentMillis - lastActivity >= idleTimeout) {
+    sleeping = true;
+    tft.PWM1out(0);
+    tft.sleep(true);
+
+    writeLog("Sleeping!");
+  }
+}
+
+void triggerWakeUp()
+{
+  if (!digitalRead(RA8875_INT)) {
+    if (tft.touched()) {
+      uint16_t tx, ty;
+      tft.touchRead(&tx, &ty);
+      lastActivity = millis();
+      if (sleeping) {
+        writeLog("Waking up!");
+        sleeping = false;
+        tft.sleep(false);
+        tft.displayOn(true);
+        drawGraph();
+        tft.PWM1out(255);
+      }
+    }
+  }
+  delay(1);
+}
+
 void loop()
 {
+  triggerSleep();
+  triggerWakeUp();
+
   if (performMeasure) {
     Measure measure = getMeasure();
     appendMeasure(measure);
