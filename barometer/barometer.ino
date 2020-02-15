@@ -69,7 +69,12 @@ double Measure::pressure()
 
 String Measure::hours()
 {
-  return _date.substring(11, 13);
+  if (0 == _date.length()) {
+    return "";
+  }
+
+  //UTC+1
+  return String(_date.substring(11, 13).toInt() + 1);
 }
 
 Adafruit_RA8875 tft = Adafruit_RA8875(RA8875_CS, RA8875_RESET);
