@@ -225,19 +225,15 @@ void drawGraph()
     maxPressure = max(maxPressure, pressure);
   }
 
-  const double rangeShift = 1.0;
   tft.textMode();
   tft.textColor(RA8875_YELLOW, RA8875_BLACK);
-  tft.textSetCursor(0, map(maxPressure, minPressure - rangeShift, maxPressure + rangeShift, 430, 30) - 20);
+  tft.textSetCursor(0, 0);
   tft.textWrite(String(maxPressure).c_str());
-  tft.textSetCursor(0, map(minPressure, minPressure - rangeShift, maxPressure + rangeShift, 430, 30));
+  tft.textSetCursor(0, 410);
   tft.textWrite(String(minPressure).c_str());
   tft.textColor(RA8875_WHITE, RA8875_BLACK);
 
   tft.graphicsMode();
-  tft.drawFastHLine(0, map(maxPressure, minPressure - rangeShift, maxPressure + rangeShift, 430, 30), 800, RA8875_YELLOW);
-  tft.drawFastHLine(0, map(minPressure, minPressure - rangeShift, maxPressure + rangeShift, 430, 30), 800, RA8875_YELLOW);
-
   for (uint16_t i = 1; i < 24; ++i) {
     Measure prevMeasure = history[i - 1];
     Measure measure = history[i];
@@ -246,9 +242,9 @@ void drawGraph()
     }
     tft.drawLine(
       9 + (i - 1) * 34,
-      map(prevMeasure.pressure(), minPressure - rangeShift, maxPressure + rangeShift, 430, 30),
+      map(prevMeasure.pressure() * 100, minPressure * 100, maxPressure * 100, 430, 30),
       9 + i * 34,
-      map(measure.pressure(), minPressure - rangeShift, maxPressure + rangeShift, 430, 30),
+      map(measure.pressure() * 100, minPressure * 100, maxPressure * 100, 430, 30),
       RA8875_RED
     );
   }
