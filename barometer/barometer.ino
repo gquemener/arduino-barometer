@@ -19,9 +19,6 @@
 #define RA8875_CS 10
 #define RA8875_RESET 9
 
-#define MIN_ATMOSPHERIC_PRESSURE 870
-#define MAX_ATMOSPHERIC_PRESSURE 1084
-
 class Measure {
     uint32_t _epoch;
     String _date;
