@@ -18,6 +18,7 @@
 #define RA8875_INT 3
 #define RA8875_CS 10
 #define RA8875_RESET 9
+#define RA8875_GREY 0x7BEF
 
 class Measure {
     uint32_t _epoch;
@@ -209,6 +210,7 @@ void drawGraph()
 
   for (uint16_t i = 0; i < 24; ++i) {
     tft.graphicsMode();
+    tft.drawFastVLine(9 + i * 34, 0, 429, RA8875_GREY);
     tft.drawFastVLine(9 + i * 34, 431, 5, RA8875_WHITE);
     tft.textMode();
     tft.textSetCursor(1 + i * 34, 436);
