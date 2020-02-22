@@ -121,7 +121,7 @@ void initRtc()
 {
   rtc.begin();
   unsigned long epoch;
-  int numberOfTries = 0, maxTries = 6;
+  int numberOfTries = 0, maxTries = 100;
   do {
     epoch = WiFi.getTime();
     numberOfTries++;
