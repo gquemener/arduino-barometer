@@ -84,8 +84,6 @@ char ssid[] = SSID;
 char pass[] = PASS;
 int wifiStatus = WL_IDLE_STATUS;
 
-bool performMeasure = false;
-
 Measure history[24];
 
 void connectToWifi()
@@ -137,14 +135,6 @@ void initRtc()
     writeLog(String(epoch));
     rtc.setEpoch(epoch);
   }
-
-  rtc.setAlarmTime(0, 0, 0);
-  rtc.enableAlarm(rtc.MATCH_MMSS);
-  rtc.attachInterrupt(alarmMatch);
-}
-
-void alarmMatch() {
-  performMeasure = true;
 }
 
 void initBmp()
@@ -418,19 +408,23 @@ void triggerWakeUp()
   delay(1);
 }
 
+unsigned long lastReport = 0xffffffff;
+const unsigned int reportInterval = 30 * 60 * 1000;
+
 void loop()
 {
   triggerSleep();
   triggerWakeUp();
 
-  if (performMeasure) {
+  unsigned long currentMillis = millis();
+
+  if (currentMillis - lastReport >= reportInterval || currentMillis < lastReport) {
     Measure measure = getMeasure();
     appendMeasure(measure);
     drawGraph();
-    performMeasure = false;
-
     pending[currentPendingIndex] = measure;
     currentPendingIndex++;
+    lastReport = currentMillis;
   }
 
   if (currentPendingIndex > 0) {
