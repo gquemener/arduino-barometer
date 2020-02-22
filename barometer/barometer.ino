@@ -379,7 +379,7 @@ void triggerSleep()
     lastActivity = currentMillis;
   }
 
-  if (currentMillis - lastActivity >= idleTimeout) {
+  if (currentMillis - lastActivity >= idleTimeout || currentMillis < lastActivity) {
     sleeping = true;
     tft.PWM1out(0);
     tft.sleep(true);
