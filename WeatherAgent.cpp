@@ -16,12 +16,9 @@ void WeatherAgent::tick(unsigned long timestamp)
     }
 
     this->apiClient->last24Hours(this->history);
-
-    this->firstTick = false;
-    return;
   }
 
-  if (timestamp - this->lastMeasureTimestamp >= 15 * 60 * 1000) {
+  if (this->firstTick || timestamp - this->lastMeasureTimestamp >= 15 * 60 * 1000) {
     this->logger->info("Measuring pressure...");
     Measure latestMeasure = this->barometer->measure();
     this->logger->info(String(latestMeasure.pressure()));
@@ -40,6 +37,7 @@ void WeatherAgent::tick(unsigned long timestamp)
     }
 
     this->lastMeasureTimestamp = timestamp;
+    this->firstTick = false;
   }
 
   if (!this->wifi->isConnected()) {
