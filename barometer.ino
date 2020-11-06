@@ -13,10 +13,10 @@
 
 #define WIFI_LED_PIN 4
 
-// SerialLogger bootLogger(9600);
-NullLogger bootLogger;
-Display display(&bootLogger);
-DisplayLogger logger(&display);
+//SerialLogger logger(9600);
+NullLogger logger;
+Display display(&logger);
+//DisplayLogger logger(&display);
 
 Wifi wifi(SECRET_SSID, SECRET_PASSWORD, &logger);
 RealTimeClock rtc(&wifi, &logger);
@@ -27,7 +27,7 @@ ApiClient apiClient(API_TOKEN, &wifi, &logger);
 WeatherAgent weatherAgent(&apiClient, &wifi, &barometer, &logger);
 
 void setup() {
-  bootLogger.info("Setting up Arduino Barometer...");
+  logger.info("Setting up Arduino Barometer...");
 
   display.boot();
   leds.boot();
