@@ -49,7 +49,7 @@ void WeatherAgent::tick(unsigned long timestamp)
     this->pendingBufferFull = false;
   }
 
-  if ((timestamp - this->lastPushTimestamp) >= 1000 && this->currentPendingSyncIndex > 0) {
+  if ((timestamp - this->lastPushTimestamp) >= 5000 && this->currentPendingSyncIndex > 0) {
     this->logger->info(String("[" + String(this->currentPendingSyncIndex - 1) + "] Synchronizing..."));
     if (this->apiClient->pushMeasure(this->pendingSync[this->currentPendingSyncIndex - 1])) {
       this->currentPendingSyncIndex--;
