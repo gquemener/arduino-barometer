@@ -18,7 +18,7 @@ void WeatherAgent::tick(unsigned long timestamp)
     this->apiClient->last24Hours(this->history);
   }
 
-  if (this->firstTick || timestamp - this->lastMeasureTimestamp >= 900000) {
+  if (this->firstTick || (timestamp - this->lastMeasureTimestamp) >= 900000) {
     this->logger->info("Measuring pressure...");
     Measure latestMeasure = this->barometer->measure();
     this->logger->info(String(latestMeasure.pressure()));
@@ -49,7 +49,7 @@ void WeatherAgent::tick(unsigned long timestamp)
     this->pendingBufferFull = false;
   }
 
-  if (timestamp - this->lastPushTimestamp >= 1000 && this->currentPendingSyncIndex > 0) {
+  if ((timestamp - this->lastPushTimestamp) >= 1000 && this->currentPendingSyncIndex > 0) {
     this->logger->info(String("[" + String(this->currentPendingSyncIndex - 1) + "] Synchronizing..."));
     if (this->apiClient->pushMeasure(this->pendingSync[this->currentPendingSyncIndex - 1])) {
       this->currentPendingSyncIndex--;
