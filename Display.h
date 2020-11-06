@@ -18,7 +18,7 @@ class Display
     Logger *logger;
     Adafruit_RA8875 tft = Adafruit_RA8875(RA8875_CS, RA8875_RESET);
     String lines[24];
-    String spaces(unsigned int count);
+    String spaces(int count);
 
   public:
     Display(Logger *logger);
