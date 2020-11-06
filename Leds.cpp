@@ -22,7 +22,7 @@ void Leds::tick(unsigned long timestamp)
     if (connected) {
       this->wifiLedState = HIGH;
       lastUpdateTimestamp = timestamp;
-    } else if (true /** Measure buffer is full, we need a wifi connection to sync */) {
+    } else if (false /** Measure buffer is full, we need a wifi connection to sync */) {
       if (timestamp - lastUpdateTimestamp > 500) {
         this->wifiLedState = this->wifiLedState == HIGH ? LOW : HIGH;
         lastUpdateTimestamp = timestamp;
