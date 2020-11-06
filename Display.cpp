@@ -24,6 +24,7 @@ void Display::boot()
 
   this->tft.textMode();
   this->tft.textColor(RA8875_WHITE, RA8875_BLACK);
+  this->tft.cursorBlink(32);
 
   pinMode(RA8875_INT, INPUT);
   digitalWrite(RA8875_INT, HIGH);
@@ -39,15 +40,19 @@ void Display::writeLine(String line)
   this->lines[23] = line + spaces(100 - line.length());
 
   for (unsigned int i = 0; i < 24; i++) {
-    tft.textSetCursor(0, i * 20);   
-    tft.textSetCursor(0, i * 20);   
+    tft.textSetCursor(0, i * 20);
     tft.textWrite(this->lines[i].c_str());
   }
 }
 
-String Display::spaces(unsigned int count)
+String Display::spaces(int count)
 {
   String spaces = "";
+
+  if (count < 0) {
+    return spaces;
+  }
+
   for (unsigned int i = 0; i < count; i++) {
     spaces.concat(" ");
   }
